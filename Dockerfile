@@ -1,10 +1,13 @@
 FROM debian:stable-slim
 
+ADD locale.gen /etc/
+
 RUN apt-get update \
  && apt-get -y dist-upgrade \
- && apt-get -y install bash openssh-server mosh screen \
+ && apt-get -y install bash locales mosh openssh-server screen \
  && rm -rf /var/lib/apt/lists/* \
- && mkdir -p /run/sshd \ 
+ && locale-gen \
+ && mkdir -p /run/sshd \
  && sed -i 's/^.*#\?.*PermitRootLogin.*$/PermitRootLogin no/' /etc/ssh/sshd_config \
  && sed -i 's/^.*#\?.*PasswordAuthentication.*$/PasswordAuthentication no/' /etc/ssh/sshd_config
 
